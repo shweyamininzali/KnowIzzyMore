@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Leave Izzy a note on her community message board." />
+    <meta name="theme-color" content="#fff8f8" />
+    <title>Message board — Izzy</title>
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Nunito:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header">
+      <a class="wordmark" href="index.html#home" aria-label="Izzy, home">
+        <span class="wordmark-mark" aria-hidden="true">i.</span>
+        <span>Izzy</span>
+      </a>
+      <nav class="site-nav" aria-label="Main navigation">
+        <a href="index.html#home">Home</a>
+        <a href="#memories">Little moments</a>
+        <a href="profile.html">My profile</a>
+        <button class="nav-contact" id="auth-open" type="button">Sign in</button>
+      </nav>
+    </header>
+
+    <main id="main">
+      <section class="page-hero section-wrap" aria-labelledby="page-title">
+        <div class="page-hero-copy">
+          <p class="eyebrow"><span class="status-dot"></span> A little place to say hello</p>
+          <h1 id="page-title">The message<br /><span>board.</span></h1>
+          <p>Share a kind thought, ask me a question, or just stop by to say hi. Sign in to post; everyone can read public notes.</p>
+          <a class="button button-dark" href="#messages">Join the conversation <span aria-hidden="true">↓</span></a>
+        </div>
+        <div class="page-hero-doodle" aria-hidden="true">
+          <span class="page-doodle-flower">✿</span>
+          <span class="page-doodle-heart">♡</span>
+          <span class="page-doodle-note">leave a<br />little note</span>
+        </div>
+      </section>
+
+      <section class="moments section-wrap page-moments" id="memories" aria-labelledby="moments-title">
+        <div class="moments-heading">
+          <div>
+            <p class="eyebrow">01 / A few happy snapshots</p>
+            <h2 id="moments-title">Little moments<span class="heading-period">.</span></h2>
+          </div>
+          <p>Some days are best remembered in pictures.</p>
+        </div>
+        <div class="moments-grid">
+          <figure class="moment-card">
+            <img
+              src="assets/izzy/WhatsApp%20Image%202026-11-26%20at%2020.19.24%20%282%29.jpeg"
+              alt="Izzy outdoors at a day camp, smiling in the fresh air"
+              loading="lazy"
+              decoding="async"
+            />
+            <figcaption><span>Fresh-air days</span><span aria-hidden="true">♡</span></figcaption>
+          </figure>
+          <figure class="moment-card">
+            <img
+              src="assets/izzy/WhatsApp%20Image%202026-11-26%20at%2020.19.24%20%283%29.jpeg"
+              alt="Izzy enjoying a winter evening among colorful lights"
+              loading="lazy"
+              decoding="async"
+            />
+            <figcaption><span>Winter sparkle</span><span aria-hidden="true">✳</span></figcaption>
+          </figure>
+          <figure class="moment-card">
+            <img
+              src="assets/izzy/WhatsApp%20Image%202026-11-26%20at%2020.19.24.jpeg"
+              alt="Izzy smiling beside autumn pumpkins and garden greenery"
+              loading="lazy"
+              decoding="async"
+            />
+            <figcaption><span>A little autumn magic</span><span aria-hidden="true">✿</span></figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <section class="guestbook section-wrap" id="messages" aria-labelledby="board-title">
+        <div class="work-heading guestbook-heading">
+          <div>
+            <p class="eyebrow">02 / Leave a little hello</p>
+            <h2 id="board-title">Community messages<span class="heading-period">.</span></h2>
+          </div>
+          <p>Choose whether your note is public or private before you send it.</p>
+        </div>
+        <div class="guestbook-card">
+          <header class="guestbook-card-header">
+            <div>
+              <p class="eyebrow">A note for Izzy</p>
+              <h3>The conversation</h3>
+            </div>
+            <span class="guestbook-live" id="board-status" role="status" aria-live="polite">Connecting…</span>
+          </header>
+          <p class="guestbook-notice" id="board-notice" role="status" aria-live="polite"></p>
+          <div class="guestbook-list" id="post-list" aria-live="polite" aria-busy="true">
+            <p class="guestbook-empty">Loading messages…</p>
+          </div>
+          <div class="guestbook-join" id="board-join">
+            <p>Anyone can read the board. Sign in to leave a message.</p>
+            <button class="button button-dark" id="board-signin" type="button">Sign in to post</button>
+          </div>
+          <form class="guestbook-form" id="post-form" hidden>
+            <div class="guestbook-author-line">
+              <p>Posting as <strong id="post-author"></strong></p>
+              <a href="profile.html">Edit profile</a>
+            </div>
+            <label for="post-visibility">Who can see this message?</label>
+            <select id="post-visibility" name="visibility">
+              <option value="public">Public — everyone can read it</option>
+              <option value="private">Private — only you and Izzy can read it</option>
+            </select>
+            <div class="guestbook-composer">
+              <label class="visually-hidden" for="post-message">Your message</label>
+              <textarea
+                id="post-message"
+                name="message"
+                maxlength="2000"
+                rows="3"
+                placeholder="Write a kind note..."
+                required
+              ></textarea>
+              <button class="button button-dark" id="post-submit" type="submit">Send message</button>
+            </div>
+            <p class="guestbook-form-status" id="post-status" role="status" aria-live="polite"></p>
+          </form>
+          <p class="guestbook-privacy">Public messages are visible to everyone. Private messages are visible only to you and Izzy. Uploaded profile photos are public and may appear beside public messages.</p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <a class="wordmark" href="index.html#home"><span class="wordmark-mark" aria-hidden="true">i.</span><span>Izzy</span></a>
+      <p>Made with curiosity <span aria-hidden="true">✳</span> <span id="year">2025</span></p>
+      <a href="#main">Back to top ↑</a>
+    </footer>
+    <dialog class="auth-dialog" id="auth-dialog" aria-labelledby="auth-title" aria-describedby="auth-description">
+      <div class="auth-dialog-card">
+        <button class="auth-close" id="auth-close" type="button" aria-label="Close sign-in dialog">×</button>
+        <p class="eyebrow"><span class="status-dot"></span> Your little corner</p>
+        <h2 id="auth-title">Welcome back.</h2>
+        <p class="auth-description" id="auth-description">Sign in or create an account to get started.</p>
+        <div class="auth-mode-toggle" id="auth-mode-toggle" role="group" aria-label="Choose an account action">
+          <button class="auth-mode-button" id="auth-login-mode" type="button" aria-pressed="true">Log in</button>
+          <button class="auth-mode-button" id="auth-signup-mode" type="button" aria-pressed="false">Sign up</button>
+        </div>
+        <form class="auth-form" id="auth-form">
+          <label for="auth-display-name" id="auth-display-name-label" hidden>Profile name</label>
+          <input id="auth-display-name" name="display-name" type="text" autocomplete="nickname" maxlength="80" hidden />
+          <label for="auth-email">Email address</label>
+          <input id="auth-email" name="email" type="email" autocomplete="email" required />
+          <label for="auth-password">Password</label>
+          <input id="auth-password" name="password" type="password" autocomplete="current-password" minlength="6" required />
+          <button class="button button-dark" id="auth-submit" type="submit">Log in</button>
+        </form>
+        <div class="auth-session" id="auth-session" hidden>
+          <p id="auth-user-line"></p>
+          <button class="button button-light" id="auth-signout" type="button">Sign out</button>
+        </div>
+        <p class="auth-status" id="auth-status" role="status" aria-live="polite"></p>
+        <p class="auth-footnote" id="auth-footnote">Sign-up may require email confirmation.</p>
+      </div>
+    </dialog>
+    <script src="script.js"></script>
+    <script type="module" src="auth.js?v=pages-avatars-1"></script>
+    <script type="module" src="message-board.js?v=pages-avatars-1"></script>
+  </body>
+</html>

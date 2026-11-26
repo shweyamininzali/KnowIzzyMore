@@ -1,16 +1,16 @@
-# Personal introduction page
+# Izzy — personal website
 
-A responsive, static introduction and portfolio page built with plain HTML, CSS, and JavaScript. No build step or package installation is required.
+A responsive, static website with a personal introduction, community message board, and separate member-profile page. It uses plain HTML, CSS, and JavaScript; no build step or package installation is required.
 
 ## Make it yours
 
-1. Open `index.html` and replace the example name, role, introduction, about text, project details, and contact email.
+1. Open `index.html` and update the introduction, about text, and project details.
 2. Update the page title and description in the `<head>`.
 3. Replace the example projects with your own. The project cards are currently illustrative and do not link to external projects.
 4. Adjust colors, typography, and layouts in `styles.css`.
 5. Open `index.html` in a browser to preview the page.
 
-The page uses Google Fonts when a network connection is available and falls back to sans-serif fonts otherwise. The photo gallery uses selected images from `assets/izzy`. The hero includes an original animated flower GIF with a static SVG alternative for reduced-motion preferences.
+The introduction lives at `index.html`; the community board is `message-board.html`, and account settings are at `profile.html`. All contact calls to action link to the message board. The photo galleries use images from `assets/izzy`. The home-page hero includes an original animated flower GIF with a static SVG alternative for reduced-motion preferences.
 
 ## Supabase sign-in and message board
 
@@ -21,7 +21,7 @@ Before using signup on the live site:
 1. Enable the **Email** provider in Supabase Authentication settings.
 2. In **Authentication → URL Configuration**, set the Site URL to `https://shweyamininzali.github.io/KnowIzzyMore/` and add that same URL to the allowed redirect URLs. Add your local preview URL there too if you test signup locally.
 3. Keep Row Level Security enabled. Public posts are readable by anyone; private posts are readable only by their author and the site owner.
-4. In the same Supabase project, run [`supabase/message-board-access.sql`](supabase/message-board-access.sql) in the SQL Editor. It creates and backfills private profiles, preserves existing messages as public, replaces the board/profile policies, and enables signed-in users to post under their own account.
+4. In the same Supabase project, run [`supabase/message-board-access.sql`](supabase/message-board-access.sql) in the SQL Editor. If the board was previously set up, run this updated script again to add profile-photo support. It creates and backfills profiles, preserves existing messages as public, configures the public `avatars` Storage bucket, and restricts uploads/deletions to each signed-in user's own folder.
 5. Add the owner's existing Supabase Auth account to the private owner list by running this once in the SQL Editor, replacing the placeholder with the owner's sign-in email. Keep the actual email out of committed public files:
 
    ```sql
@@ -30,7 +30,7 @@ Before using signup on the live site:
    on conflict (user_id) do nothing;
    ```
 
-The Supabase JavaScript client is loaded from `esm.sh`, so no build step or npm install is needed. Signup displays an email-confirmation prompt when Supabase requires confirmation. Supabase Auth stores passwords as secure hashes; this site never stores or reads password values after sign-in. Profile data is private to each user. Public post names and messages are visible to everyone; private messages are visible only to the author and owner. Email is shown read-only on the profile page and cannot be changed there.
+The Supabase JavaScript client is loaded from `esm.sh`, so no build step or npm install is needed. Signup displays an email-confirmation prompt when Supabase requires confirmation. Supabase Auth stores passwords as secure hashes; this site never stores or reads password values after sign-in. Profile details are private to each user. Public post names, messages, and uploaded profile photos are visible to everyone; private messages are visible only to the author and owner. Email is shown read-only on the profile page and cannot be changed there. Users are told that an uploaded profile photo is public and may appear beside their public messages.
 
 The original [messageboard_db](https://github.com/shweyamininzali/messageboard_db) Express server is not used by GitHub Pages. Do not deploy its current anonymous API publicly: it uses a server secret that bypasses RLS, and its endpoints do not require a signed-in user.
 

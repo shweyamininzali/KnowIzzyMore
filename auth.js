@@ -90,7 +90,12 @@ function setMode(nextMode) {
 
 authOpen.addEventListener("click", () => {
   if (currentUser) {
-    window.location.hash = "profile";
+    const profileUrl = new URL("profile.html", window.location.href);
+    if (profileUrl.pathname === window.location.pathname) {
+      document.querySelector("#profile")?.scrollIntoView({ behavior: "smooth" });
+    } else {
+      window.location.assign(profileUrl.href);
+    }
     return;
   }
 

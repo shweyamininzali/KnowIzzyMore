@@ -12,13 +12,20 @@ alter table public.posts
   add column if not exists visibility text not null default 'public'
   check (visibility in ('public', 'private'));
 
+alter table public.posts
+  add column if not exists avatar_path text;
+
 create table if not exists public.profiles (
   user_id uuid primary key references auth.users (id) on delete cascade,
   display_name text not null check (char_length(display_name) between 1 and 80),
   country text not null default '' check (char_length(country) <= 100),
   interests text not null default '' check (char_length(interests) <= 500),
+  avatar_path text,
   updated_at timestamptz not null default now()
 );
+
+alter table public.profiles
+  add column if not exists avatar_path text;
 
 create table if not exists public.message_board_owner (
   user_id uuid primary key references auth.users (id) on delete cascade
@@ -71,8 +78,8 @@ begin
     raise exception 'A post must belong to your signed-in account.';
   end if;
 
-  select profiles.display_name
-    into new.name
+  select profiles.display_name, profiles.avatar_path
+    into new.name, new.avatar_path
     from public.profiles
     where profiles.user_id = new.user_id;
 
@@ -112,9 +119,11 @@ security definer
 set search_path = ''
 as $$
 begin
-  if new.display_name is distinct from old.display_name then
+  if new.display_name is distinct from old.display_name
+    or new.avatar_path is distinct from old.avatar_path then
     update public.posts
-      set name = new.display_name
+      set name = new.display_name,
+          avatar_path = new.avatar_path
       where user_id = new.user_id;
   end if;
   return new;
@@ -123,7 +132,7 @@ $$;
 
 drop trigger if exists sync_profile_name_to_posts_after_update on public.profiles;
 create trigger sync_profile_name_to_posts_after_update
-  after update of display_name on public.profiles
+  after update of display_name, avatar_path on public.profiles
   for each row execute function public.sync_profile_name_to_posts();
 
 create or replace function public.is_board_owner()
@@ -198,7 +207,13 @@ create policy "Users can update their own profile"
   for update
   to authenticated
   using (auth.uid() = user_id)
-  with check (auth.uid() = user_id);
+  with check (
+    auth.uid() = user_id
+    and (
+      avatar_path is null
+      or split_part(avatar_path, '/', 1) = auth.uid()::text
+    )
+  );
 
 create index if not exists posts_user_created_at_idx
   on public.posts (user_id, created_at desc);
@@ -212,6 +227,60 @@ revoke all privileges on table public.profiles from public, anon, authenticated;
 grant select, update on table public.profiles to authenticated;
 revoke all privileges on table public.message_board_owner from public, anon, authenticated;
 grant usage on schema public to anon, authenticated;
+
+insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
+values (
+  'avatars',
+  'avatars',
+  true,
+  3145728,
+  array['image/jpeg', 'image/png', 'image/webp']
+)
+on conflict (id) do update
+  set public = excluded.public,
+      file_size_limit = excluded.file_size_limit,
+      allowed_mime_types = excluded.allowed_mime_types;
+
+drop policy if exists "Public can view profile avatars" on storage.objects;
+create policy "Public can view profile avatars"
+  on storage.objects
+  for select
+  to anon, authenticated
+  using (bucket_id = 'avatars');
+
+drop policy if exists "Users can upload own profile avatars" on storage.objects;
+create policy "Users can upload own profile avatars"
+  on storage.objects
+  for insert
+  to authenticated
+  with check (
+    bucket_id = 'avatars'
+    and split_part(name, '/', 1) = auth.uid()::text
+  );
+
+drop policy if exists "Users can replace own profile avatars" on storage.objects;
+create policy "Users can replace own profile avatars"
+  on storage.objects
+  for update
+  to authenticated
+  using (
+    bucket_id = 'avatars'
+    and split_part(name, '/', 1) = auth.uid()::text
+  )
+  with check (
+    bucket_id = 'avatars'
+    and split_part(name, '/', 1) = auth.uid()::text
+  );
+
+drop policy if exists "Users can delete own profile avatars" on storage.objects;
+create policy "Users can delete own profile avatars"
+  on storage.objects
+  for delete
+  to authenticated
+  using (
+    bucket_id = 'avatars'
+    and split_part(name, '/', 1) = auth.uid()::text
+  );
 
 revoke all on function public.create_profile_for_new_user() from public, anon, authenticated;
 revoke all on function public.set_post_author_name() from public, anon, authenticated;

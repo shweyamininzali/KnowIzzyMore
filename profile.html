@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Manage your profile for Izzy's community message board." />
+    <meta name="theme-color" content="#fff8f8" />
+    <title>My profile — Izzy</title>
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Nunito:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header">
+      <a class="wordmark" href="index.html#home" aria-label="Izzy, home">
+        <span class="wordmark-mark" aria-hidden="true">i.</span>
+        <span>Izzy</span>
+      </a>
+      <nav class="site-nav" aria-label="Main navigation">
+        <a href="index.html#home">Home</a>
+        <a href="message-board.html">Message board</a>
+        <a href="#profile">My profile</a>
+        <button class="nav-contact" id="auth-open" type="button">Sign in</button>
+      </nav>
+    </header>
+
+    <main id="main">
+      <section class="page-hero section-wrap profile-hero" aria-labelledby="page-title">
+        <div class="page-hero-copy">
+          <p class="eyebrow"><span class="status-dot"></span> Your own little corner</p>
+          <h1 id="page-title">My<br /><span>profile.</span></h1>
+          <p>Keep your name and profile details up to date. Your email stays private and can’t be changed here.</p>
+          <a class="button button-dark" href="message-board.html">Back to the message board <span aria-hidden="true">↗</span></a>
+        </div>
+        <div class="page-hero-doodle profile-doodle" aria-hidden="true">
+          <span class="page-doodle-flower">♡</span>
+          <span class="page-doodle-heart">✿</span>
+          <span class="page-doodle-note">you belong<br />here</span>
+        </div>
+      </section>
+
+      <section class="profile-page section-wrap" id="profile" aria-labelledby="profile-title">
+        <div class="profile-signin" id="profile-signin">
+          <h2>Sign in to see your profile</h2>
+          <p>Your profile is only available to you. Sign in to update your details or profile photo.</p>
+          <button class="button button-dark" id="profile-signin-button" type="button">Sign in</button>
+        </div>
+        <div class="profile-card" id="profile-content" hidden>
+          <p class="eyebrow">Your little corner</p>
+          <h2 id="profile-title">Your profile</h2>
+          <p class="profile-description">Update the details shown with your account. Your country and interests are private.</p>
+          <p class="profile-email-line">Sign-in email <strong id="profile-email"></strong><span>Email changes aren’t available here.</span></p>
+          <div class="profile-avatar-editor">
+            <div class="profile-avatar-preview">
+              <img id="profile-avatar-preview" alt="Your profile photo" hidden />
+              <span id="profile-avatar-placeholder" aria-hidden="true">♡</span>
+            </div>
+            <div class="profile-avatar-controls">
+              <label for="profile-avatar-input">Profile photo</label>
+              <input id="profile-avatar-input" type="file" accept="image/jpeg,image/png,image/webp" />
+              <p>Photos are public and may appear beside public messages. Use a JPG, PNG, or WebP image up to 3 MB.</p>
+              <button class="button button-dark" id="profile-avatar-upload" type="button">Upload profile photo</button>
+              <p class="profile-status" id="profile-avatar-status" role="status" aria-live="polite"></p>
+            </div>
+          </div>
+          <form class="profile-form" id="profile-form">
+            <label for="profile-name">Name</label>
+            <input id="profile-name" name="display_name" type="text" maxlength="80" autocomplete="nickname" required />
+            <label for="profile-country">Country</label>
+            <input id="profile-country" name="country" type="text" maxlength="100" autocomplete="country-name" />
+            <label for="profile-interests">Interests</label>
+            <textarea id="profile-interests" name="interests" maxlength="500" rows="4" placeholder="A few things you enjoy..."></textarea>
+            <button class="button button-dark" id="profile-save" type="submit">Save profile</button>
+            <p class="profile-status" id="profile-status" role="status" aria-live="polite"></p>
+          </form>
+          <button class="button button-light profile-signout" id="profile-signout" type="button">Sign out</button>
+        </div>
+      </section>
+
+      <section class="moments section-wrap page-moments profile-moments" aria-labelledby="profile-moments-title">
+        <div class="moments-heading">
+          <div>
+            <p class="eyebrow">A few more memories</p>
+            <h2 id="profile-moments-title">Good days, together<span class="heading-period">.</span></h2>
+          </div>
+          <p>People, places, and small things worth remembering.</p>
+        </div>
+        <div class="moments-grid">
+          <figure class="moment-card">
+            <img
+              src="assets/izzy/WhatsApp%20Image%202026-11-26%20at%2020.19.24%20%284%29.jpeg"
+              alt="Izzy with students during a classroom activity with a Myanmar flag"
+              loading="lazy"
+              decoding="async"
+            />
+            <figcaption><span>Learning together</span><span aria-hidden="true">♡</span></figcaption>
+          </figure>
+          <figure class="moment-card">
+            <img
+              src="assets/izzy/WhatsApp%20Image%202026-11-26%20at%2020.19.24%20%287%29.jpeg"
+              alt="Izzy and a friend smiling together while cooking"
+              loading="lazy"
+              decoding="async"
+            />
+            <figcaption><span>Kitchen company</span><span aria-hidden="true">✿</span></figcaption>
+          </figure>
+          <figure class="moment-card">
+            <img
+              src="assets/izzy/WhatsApp%20Image%202026-11-26%20at%2020.19.24%20%288%29.jpeg"
+              alt="Izzy with friends at a community event"
+              loading="lazy"
+              decoding="async"
+            />
+            <figcaption><span>Good people</span><span aria-hidden="true">✳</span></figcaption>
+          </figure>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <a class="wordmark" href="index.html#home"><span class="wordmark-mark" aria-hidden="true">i.</span><span>Izzy</span></a>
+      <p>Made with curiosity <span aria-hidden="true">✳</span> <span id="year">2025</span></p>
+      <a href="#main">Back to top ↑</a>
+    </footer>
+    <dialog class="auth-dialog" id="auth-dialog" aria-labelledby="auth-title" aria-describedby="auth-description">
+      <div class="auth-dialog-card">
+        <button class="auth-close" id="auth-close" type="button" aria-label="Close sign-in dialog">×</button>
+        <p class="eyebrow"><span class="status-dot"></span> Your little corner</p>
+        <h2 id="auth-title">Welcome back.</h2>
+        <p class="auth-description" id="auth-description">Sign in or create an account to get started.</p>
+        <div class="auth-mode-toggle" id="auth-mode-toggle" role="group" aria-label="Choose an account action">
+          <button class="auth-mode-button" id="auth-login-mode" type="button" aria-pressed="true">Log in</button>
+          <button class="auth-mode-button" id="auth-signup-mode" type="button" aria-pressed="false">Sign up</button>
+        </div>
+        <form class="auth-form" id="auth-form">
+          <label for="auth-display-name" id="auth-display-name-label" hidden>Profile name</label>
+          <input id="auth-display-name" name="display-name" type="text" autocomplete="nickname" maxlength="80" hidden />
+          <label for="auth-email">Email address</label>
+          <input id="auth-email" name="email" type="email" autocomplete="email" required />
+          <label for="auth-password">Password</label>
+          <input id="auth-password" name="password" type="password" autocomplete="current-password" minlength="6" required />
+          <button class="button button-dark" id="auth-submit" type="submit">Log in</button>
+        </form>
+        <div class="auth-session" id="auth-session" hidden>
+          <p id="auth-user-line"></p>
+          <button class="button button-light" id="auth-signout" type="button">Sign out</button>
+        </div>
+        <p class="auth-status" id="auth-status" role="status" aria-live="polite"></p>
+        <p class="auth-footnote" id="auth-footnote">Sign-up may require email confirmation.</p>
+      </div>
+    </dialog>
+    <script src="script.js"></script>
+    <script type="module" src="auth.js?v=pages-avatars-1"></script>
+    <script type="module" src="profile.js?v=pages-avatars-1"></script>
+  </body>
+</html>

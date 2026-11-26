@@ -1,4 +1,4 @@
-import { currentUser, supabase, supabaseReady } from "./auth.js?v=950eba3";
+import { currentUser, supabase, supabaseReady } from "./auth.js?v=pages-avatars-1";
 
 const signInButton = document.querySelector("#board-signin");
 const boardJoin = document.querySelector("#board-join");
@@ -14,6 +14,7 @@ const postStatus = document.querySelector("#post-status");
 const messages = new Map();
 let feedGeneration = 0;
 let profileGeneration = 0;
+let boardAvatarPath = null;
 
 function getErrorMessage(error, fallback) {
   if (error instanceof Error) {
@@ -23,6 +24,14 @@ function getErrorMessage(error, fallback) {
     return error.message;
   }
   return fallback;
+}
+
+function isMissingAvatarColumn(error) {
+  return (
+    ["42703", "PGRST204"].includes(error?.code) &&
+    typeof error.message === "string" &&
+    error.message.includes("avatar_path")
+  );
 }
 
 function formatTime(value) {
@@ -56,18 +65,28 @@ async function updateBoardAccess(user) {
     postForm.hidden = true;
     postForm.reset();
     postAuthor.textContent = "";
+    boardAvatarPath = null;
     setPostStatus("");
     return;
   }
 
   postForm.hidden = true;
   try {
-    const { data, error } = await supabase
+    let result = await supabase
       .from("profiles")
-      .select("display_name")
+      .select("display_name, avatar_path")
       .eq("user_id", user.id)
       .single();
 
+    if (isMissingAvatarColumn(result.error)) {
+      result = await supabase
+        .from("profiles")
+        .select("display_name")
+        .eq("user_id", user.id)
+        .single();
+    }
+
+    const { data, error } = result;
     if (error) {
       throw error;
     }
@@ -76,6 +95,7 @@ async function updateBoardAccess(user) {
     }
 
     postAuthor.textContent = data.display_name;
+    boardAvatarPath = data.avatar_path || null;
     postForm.hidden = false;
     setPostStatus("");
   } catch (error) {
@@ -110,6 +130,16 @@ function renderPosts() {
 
     const metadata = document.createElement("div");
     metadata.className = "guestbook-post-meta";
+
+    if (post.avatar_path) {
+      const avatar = document.createElement("img");
+      avatar.className = "guestbook-avatar";
+      avatar.alt = "";
+      avatar.loading = "lazy";
+      avatar.src = supabase.storage.from("avatars").getPublicUrl(post.avatar_path).data.publicUrl;
+      avatar.addEventListener("error", () => avatar.remove(), { once: true });
+      metadata.append(avatar);
+    }
 
     const author = document.createElement("span");
     author.className = "guestbook-author";
@@ -176,12 +206,21 @@ async function loadPosts() {
   const generation = ++feedGeneration;
 
   try {
-    const { data, error } = await supabase
+    let result = await supabase
       .from("posts")
-      .select("id, name, message, created_at, visibility")
+      .select("id, name, message, created_at, visibility, avatar_path")
       .order("created_at", { ascending: false })
       .limit(100);
 
+    if (isMissingAvatarColumn(result.error)) {
+      result = await supabase
+        .from("posts")
+        .select("id, name, message, created_at, visibility")
+        .order("created_at", { ascending: false })
+        .limit(100);
+    }
+
+    const { data, error } = result;
     if (error) {
       throw error;
     }
@@ -245,7 +284,7 @@ postForm.addEventListener("submit", async (event) => {
       throw error;
     }
 
-    addPost(data);
+    addPost({ ...data, avatar_path: boardAvatarPath });
     postMessage.value = "";
     setPostStatus("Your message has been posted.");
     postMessage.focus();
@@ -310,10 +349,5 @@ async function initializeBoard() {
     postList.setAttribute("aria-busy", "false");
   }
 }
-
-document.addEventListener("profile-updated", (event) => {
-  postAuthor.textContent = event.detail.displayName;
-  void loadPosts();
-});
 
 initializeBoard();
