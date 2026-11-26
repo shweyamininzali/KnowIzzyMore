@@ -7,13 +7,13 @@
       name="description"
       content="The introduction of Izzy — software and web developer based in Kobe, Japan."
     />
-    <meta name="theme-color" content="#f7f5ef" />
+    <meta name="theme-color" content="#fff8f8" />
     <title>Izzy — Software &amp; Web Developer</title>
     <link rel="icon" href="favicon.svg" type="image/svg+xml" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap"
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Nunito:wght@400;500;600;700;800&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="styles.css" />
@@ -28,6 +28,7 @@
       </a>
       <nav class="site-nav" aria-label="Main navigation">
         <a href="#about">About</a>
+        <a href="#moments">Moments</a>
         <a href="#work">Selected work</a>
         <a class="nav-contact" href="mailto:s26143@st.kic.ac.jp">
           Say hello <span aria-hidden="true">↗</span>
@@ -56,24 +57,33 @@
           </div>
         </div>
 
-        <div class="hero-art" aria-label="Abstract illustration of a person surrounded by colorful shapes" role="img">
+        <div class="hero-art">
           <div class="art-sun"></div>
           <div class="art-orbit orbit-one"></div>
           <div class="art-orbit orbit-two"></div>
           <div class="art-sparkle sparkle-one" aria-hidden="true">✳</div>
           <div class="art-sparkle sparkle-two" aria-hidden="true">✳</div>
           <div class="art-caption">a curious mind<br />at work</div>
-          <svg class="art-person" viewBox="0 0 360 420" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <path d="M75 420c3-91 32-153 105-153s102 62 105 153H75Z" fill="#334C3C"/>
-            <path d="M136 275c10 23 25 37 44 37s34-14 44-37l-44-31-44 31Z" fill="#E8A184"/>
-            <path d="M112 149c0-66 26-101 70-101s70 35 70 101v52c0 52-31 89-70 89s-70-37-70-89v-52Z" fill="#F2B69B"/>
-            <path d="M108 152c-12-79 19-131 82-131 49 0 78 30 77 88-16-18-29-28-48-36-21 25-61 40-111 39v40Z" fill="#28312B"/>
-            <path d="M119 177c-16-18-29-5-26 15 3 19 14 29 28 27m132-42c16-18 29-5 26 15-3 19-14 29-28 27" fill="#F2B69B"/>
-            <path d="M143 178h9m65 0h9" stroke="#28312B" stroke-width="7" stroke-linecap="round"/>
-            <path d="M161 217c10 10 29 10 39 0" stroke="#B96F5D" stroke-width="5" stroke-linecap="round"/>
-            <path d="M153 286 180 312l27-26" stroke="#F7F5EF" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="m105 420 75-108 75 108" fill="#58735E"/>
+          <svg class="art-doodle art-heart" viewBox="0 0 64 64" aria-hidden="true">
+            <path d="M32 55C26 48 7 37 7 22 7 7 25 4 32 19 39 4 57 7 57 22c0 15-19 26-25 33Z" />
           </svg>
+          <div class="art-photo-frame">
+            <img
+              class="art-photo"
+              src="assets/izzy/WhatsApp%20Image%202026-11-26%20at%2020.19.24%20%286%29.jpeg"
+              alt="Izzy smiling with a colorful bouquet of flowers"
+              width="1200"
+              height="1599"
+              fetchpriority="high"
+              decoding="async"
+            />
+          </div>
+          <div class="art-flower-badge" aria-hidden="true">
+            <picture>
+              <source srcset="assets/flower.svg" media="(prefers-reduced-motion: reduce)" />
+              <img src="assets/flower.gif" alt="" width="96" height="96" />
+            </picture>
+          </div>
           <div class="art-sticker"><span>nice to<br />meet you!</span><span aria-hidden="true">☺</span></div>
         </div>
         <a class="scroll-cue" href="#about"><span aria-hidden="true">↓</span> A little about me</a>
@@ -105,10 +115,64 @@
         </div>
       </section>
 
+      <section class="moments section-wrap" id="moments" aria-labelledby="moments-title">
+        <div class="moments-heading">
+          <div>
+            <p class="eyebrow">02 / Little life moments</p>
+            <h2 id="moments-title">Outside the code<span class="heading-period">.</span></h2>
+          </div>
+          <p>Flowers, fresh air, and something good cooking.</p>
+        </div>
+        <div class="moments-grid">
+          <figure class="moment-card">
+            <img
+              src="assets/izzy/WhatsApp%20Image%202026-11-26%20at%2020.19.23.jpeg"
+              alt="Izzy smiling in a garden filled with colorful flowers"
+              width="1599"
+              height="1200"
+              loading="lazy"
+              decoding="async"
+            />
+            <figcaption>
+              <span>Flower days</span>
+              <span aria-hidden="true">✿</span>
+            </figcaption>
+          </figure>
+          <figure class="moment-card">
+            <img
+              src="assets/izzy/WhatsApp%20Image%202026-11-26%20at%2020.19.24%20%281%29.jpeg"
+              alt="Izzy enjoying a quiet forest trail"
+              width="1200"
+              height="1600"
+              loading="lazy"
+              decoding="async"
+            />
+            <figcaption>
+              <span>Trail time</span>
+              <span aria-hidden="true">♡</span>
+            </figcaption>
+          </figure>
+          <figure class="moment-card">
+            <img
+              src="assets/izzy/WhatsApp%20Image%202026-11-26%20at%2020.19.24%20%285%29.jpeg"
+              alt="Izzy preparing a meal in the kitchen"
+              width="1200"
+              height="1600"
+              loading="lazy"
+              decoding="async"
+            />
+            <figcaption>
+              <span>Kitchen happy place</span>
+              <span aria-hidden="true">♡</span>
+            </figcaption>
+          </figure>
+        </div>
+      </section>
+
       <section class="work section-wrap" id="work" aria-labelledby="work-title">
         <div class="work-heading">
           <div>
-            <p class="eyebrow">02 / A few favorites</p>
+            <p class="eyebrow">03 / A few favorites</p>
             <h2 id="work-title">Where I’ve worked<span class="heading-period">.</span></h2>
           </div>
           <p>Professional experience across airport, education, telecom, and hospitality organizations.</p>
@@ -150,7 +214,7 @@
 
       <section class="contact section-wrap" aria-labelledby="contact-title">
         <div class="contact-spark" aria-hidden="true">✳</div>
-        <p class="eyebrow">03 / Your turn</p>
+        <p class="eyebrow">04 / Your turn</p>
         <h2 id="contact-title">Let’s connect<br />and work together.</h2>
         <p>For projects, opportunities, or technical questions, get in touch through my email.</p>
         <a class="button button-light" href="mailto:s26143@st.kic.ac.jp">

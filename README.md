@@ -10,7 +10,7 @@ A responsive, static introduction and portfolio page built with plain HTML, CSS,
 4. Adjust colors, typography, and layouts in `styles.css`.
 5. Open `index.html` in a browser to preview the page.
 
-The page uses Google Fonts when a network connection is available and falls back to sans-serif fonts otherwise. The illustration and project artwork are built into the page; no image assets are required.
+The page uses Google Fonts when a network connection is available and falls back to sans-serif fonts otherwise. The hero includes an original animated flower GIF with a static SVG alternative for reduced-motion preferences.
 
 ## Publish on GitHub Pages
 
