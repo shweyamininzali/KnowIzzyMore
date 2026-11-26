@@ -12,17 +12,20 @@ A responsive, static introduction and portfolio page built with plain HTML, CSS,
 
 The page uses Google Fonts when a network connection is available and falls back to sans-serif fonts otherwise. The photo gallery uses selected images from `assets/izzy`. The hero includes an original animated flower GIF with a static SVG alternative for reduced-motion preferences.
 
-## Supabase sign-in
+## Supabase sign-in and message board
 
-The sign-in dialog uses Supabase Auth from the browser; this static site does not use Next.js server helpers or store custom profile data. The Supabase project URL and publishable key are configured in `auth.js`. A publishable key is intended for public clients; never put a service-role key in this site.
+The sign-in dialog and message board use Supabase from the browser; this static site does not use Next.js server helpers. The Supabase project URL and publishable key are configured in `auth.js`. A publishable key is intended for public clients; never put a service-role key in this site.
 
 Before using signup on the live site:
 
 1. Enable the **Email** provider in Supabase Authentication settings.
 2. In **Authentication → URL Configuration**, set the Site URL to `https://shweyamininzali.github.io/KnowIzzyMore/` and add that same URL to the allowed redirect URLs. Add your local preview URL there too if you test signup locally.
-3. Keep Row Level Security enabled and add appropriate policies before connecting any database tables. Authentication alone does not save profile or other app data.
+3. Keep Row Level Security enabled. The board is public to read, but only signed-in users can post.
+4. In the same Supabase project, run [`supabase/message-board-access.sql`](supabase/message-board-access.sql) in the SQL Editor. It creates `posts` if needed, preserves existing messages, replaces the policies on that table with public-read/authenticated-insert access, and grants signed-in users permission to insert messages under their own account.
 
-The Supabase JavaScript client is loaded from `esm.sh` when the sign-in dialog initializes, so no build step or npm install is needed. Signup displays an email-confirmation prompt when Supabase requires confirmation.
+The Supabase JavaScript client is loaded from `esm.sh`, so no build step or npm install is needed. Signup displays an email-confirmation prompt when Supabase requires confirmation. Message content and display names are public; do not post private information.
+
+The original [messageboard_db](https://github.com/shweyamininzali/messageboard_db) Express server is not used by GitHub Pages. Do not deploy its current anonymous API publicly: it uses a server secret that bypasses RLS, and its endpoints do not require a signed-in user.
 
 ## Publish on GitHub Pages
 

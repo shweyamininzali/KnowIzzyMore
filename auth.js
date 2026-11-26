@@ -8,6 +8,8 @@ const authClose = document.querySelector("#auth-close");
 const authTitle = document.querySelector("#auth-title");
 const authDescription = document.querySelector("#auth-description");
 const authForm = document.querySelector("#auth-form");
+const authDisplayNameLabel = document.querySelector("#auth-display-name-label");
+const authDisplayName = document.querySelector("#auth-display-name");
 const authEmail = document.querySelector("#auth-email");
 const authPassword = document.querySelector("#auth-password");
 const authSubmit = document.querySelector("#auth-submit");
@@ -20,10 +22,10 @@ const authSignout = document.querySelector("#auth-signout");
 const authStatus = document.querySelector("#auth-status");
 const authFootnote = document.querySelector("#auth-footnote");
 
-let supabase = null;
+export let supabase = null;
 let connectionState = "loading";
 let connectionError = null;
-let currentUser = null;
+export let currentUser = null;
 let mode = "login";
 
 function setStatus(message, state) {
@@ -47,11 +49,15 @@ function getErrorMessage(error) {
 
 function updateView() {
   const signedIn = Boolean(currentUser);
+  const signingUp = !signedIn && mode === "signup";
   authOpen.textContent = signedIn ? "Account" : "Sign in";
   authForm.hidden = signedIn;
   authModeToggle.hidden = signedIn;
   authSession.hidden = !signedIn;
   authFootnote.hidden = signedIn;
+  authDisplayNameLabel.hidden = !signingUp;
+  authDisplayName.hidden = !signingUp;
+  authDisplayName.required = signingUp;
 
   if (signedIn) {
     authTitle.textContent = "You’re signed in.";
@@ -63,7 +69,7 @@ function updateView() {
   authTitle.textContent = mode === "signup" ? "Make yourself at home." : "Welcome back.";
   authDescription.textContent =
     mode === "signup"
-      ? "Create an account with your email and a password of at least six characters."
+      ? "Choose a display name, email, and password of at least six characters."
       : "Sign in with your email address and password.";
   authFootnote.textContent =
     mode === "signup"
@@ -133,6 +139,9 @@ authForm.addEventListener("submit", async (event) => {
             email,
             password,
             options: {
+              data: {
+                display_name: authDisplayName.value.trim(),
+              },
               emailRedirectTo: new URL("./", window.location.href).href,
             },
           })
@@ -218,4 +227,4 @@ async function initializeAuth() {
 }
 
 updateView();
-initializeAuth();
+export const supabaseReady = initializeAuth();

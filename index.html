@@ -30,6 +30,7 @@
         <a href="#about">About</a>
         <a href="#moments">Moments</a>
         <a href="#work">Selected work</a>
+        <a href="#messages">Message board</a>
         <button class="nav-contact" id="auth-open" type="button">Sign in</button>
       </nav>
     </header>
@@ -210,9 +211,54 @@
         <p class="work-footnote">Also worked with Ascott / Capitaland.</p>
       </section>
 
+      <section class="guestbook section-wrap" id="messages" aria-labelledby="guestbook-title">
+        <div class="work-heading guestbook-heading">
+          <div>
+            <p class="eyebrow">04 / Leave a little hello</p>
+            <h2 id="guestbook-title">The message board<span class="heading-period">.</span></h2>
+          </div>
+          <p>Have a question or a kind thought? I’d love to hear from you.</p>
+        </div>
+        <div class="guestbook-card">
+          <header class="guestbook-card-header">
+            <div>
+              <p class="eyebrow">A note for Izzy</p>
+              <h3>Community messages</h3>
+            </div>
+            <span class="guestbook-live" id="board-status" role="status" aria-live="polite">Connecting…</span>
+          </header>
+          <p class="guestbook-notice" id="board-notice" role="status" aria-live="polite"></p>
+          <div class="guestbook-list" id="post-list" aria-live="polite" aria-busy="true">
+            <p class="guestbook-empty">Loading messages…</p>
+          </div>
+          <div class="guestbook-join" id="board-join">
+            <p>Anyone can read the board. Sign in to leave a message.</p>
+            <button class="button button-dark" id="board-signin" type="button">Sign in to post</button>
+          </div>
+          <form class="guestbook-form" id="post-form" hidden>
+            <label for="post-name">Your display name</label>
+            <input id="post-name" name="name" type="text" maxlength="80" autocomplete="nickname" required />
+            <div class="guestbook-composer">
+              <label class="visually-hidden" for="post-message">Your message</label>
+              <textarea
+                id="post-message"
+                name="message"
+                maxlength="2000"
+                rows="3"
+                placeholder="Write a kind note..."
+                required
+              ></textarea>
+              <button class="button button-dark" id="post-submit" type="submit">Send message</button>
+            </div>
+            <p class="guestbook-form-status" id="post-status" role="status" aria-live="polite"></p>
+          </form>
+          <p class="guestbook-privacy">Messages are public. Please don’t share private information.</p>
+        </div>
+      </section>
+
       <section class="contact section-wrap" aria-labelledby="contact-title">
         <div class="contact-spark" aria-hidden="true">✳</div>
-        <p class="eyebrow">04 / Your turn</p>
+        <p class="eyebrow">05 / Your turn</p>
         <h2 id="contact-title">Let’s connect<br />and work together.</h2>
         <p>For projects, opportunities, or technical questions, get in touch through my email.</p>
         <a class="button button-light" href="mailto:s26143@st.kic.ac.jp">
@@ -239,6 +285,15 @@
           <button class="auth-mode-button" id="auth-signup-mode" type="button" aria-pressed="false">Sign up</button>
         </div>
         <form class="auth-form" id="auth-form">
+          <label for="auth-display-name" id="auth-display-name-label" hidden>Display name</label>
+          <input
+            id="auth-display-name"
+            name="display-name"
+            type="text"
+            autocomplete="nickname"
+            maxlength="80"
+            hidden
+          />
           <label for="auth-email">Email address</label>
           <input id="auth-email" name="email" type="email" autocomplete="email" required />
           <label for="auth-password">Password</label>
@@ -262,5 +317,6 @@
     </dialog>
     <script src="script.js"></script>
     <script type="module" src="auth.js"></script>
+    <script type="module" src="message-board.js"></script>
   </body>
 </html>

@@ -990,6 +990,243 @@ h3 {
   text-align: right;
 }
 
+.guestbook {
+  padding-top: 6rem;
+  padding-bottom: 6rem;
+  border-top: 1px solid var(--line);
+}
+
+.guestbook-heading {
+  margin-bottom: 2rem;
+}
+
+.guestbook-card {
+  overflow: hidden;
+  border: 1px solid #f0dfe7;
+  border-radius: 22px;
+  background: #fffdfd;
+  box-shadow: 0 12px 30px #734c6718;
+}
+
+.guestbook-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.guestbook-card-header .eyebrow {
+  margin-bottom: 0.2rem;
+  font-size: 0.62rem;
+}
+
+.guestbook-card-header h3 {
+  margin: 0;
+  font-family: var(--display);
+  font-size: 1.3rem;
+  letter-spacing: -0.035em;
+}
+
+.guestbook-live {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--muted);
+  font-size: 0.72rem;
+}
+
+.guestbook-live::before {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #c7b9c3;
+  content: "";
+}
+
+.guestbook-live.is-connected::before {
+  background: #88a879;
+  box-shadow: 0 0 0 3px #88a87925;
+}
+
+.guestbook-notice {
+  margin: 0;
+  padding: 0.75rem 1.5rem 0;
+  color: #a64c63;
+  font-size: 0.8rem;
+}
+
+.guestbook-notice:empty {
+  display: none;
+}
+
+.guestbook-list {
+  display: flex;
+  height: min(440px, 55vh);
+  min-height: 180px;
+  flex-direction: column;
+  gap: 1rem;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 1.5rem;
+  scroll-behavior: smooth;
+}
+
+.guestbook-post {
+  width: fit-content;
+  max-width: min(88%, 580px);
+  animation: guestbook-arrive 220ms ease both;
+}
+
+.guestbook-post-meta {
+  display: flex;
+  align-items: baseline;
+  gap: 0.65rem;
+  margin: 0 0 0.3rem 0.2rem;
+}
+
+.guestbook-author {
+  overflow: hidden;
+  color: var(--plum);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.guestbook-time {
+  flex: 0 0 auto;
+  color: #9c8b99;
+  font-size: 0.68rem;
+}
+
+.guestbook-message {
+  margin: 0;
+  border: 1px solid #f0dfe7;
+  border-radius: 4px 16px 16px 16px;
+  padding: 0.7rem 0.9rem;
+  background: #fff8f8;
+  font-size: 0.86rem;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+
+.guestbook-empty {
+  margin: auto;
+  padding: 1rem;
+  color: var(--muted);
+  font-size: 0.85rem;
+  text-align: center;
+}
+
+.guestbook-join {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+  border-top: 1px solid var(--line);
+  background: #fffafa;
+}
+
+.guestbook-join p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+.guestbook-join .button,
+.guestbook-form .button {
+  border: 0;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.guestbook button:focus-visible {
+  outline: 3px solid var(--orange);
+  outline-offset: 3px;
+}
+
+.guestbook button:disabled {
+  cursor: wait;
+  opacity: 0.65;
+}
+
+.guestbook-form {
+  display: grid;
+  gap: 0.55rem;
+  padding: 1rem 1.5rem 0.75rem;
+  border-top: 1px solid var(--line);
+}
+
+.guestbook-form label {
+  color: #665466;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.guestbook-form input,
+.guestbook-form textarea {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #fff;
+  color: var(--ink);
+  font: inherit;
+  font-size: 0.86rem;
+}
+
+.guestbook-form input {
+  min-height: 44px;
+  padding: 0.55rem 0.75rem;
+}
+
+.guestbook-form textarea {
+  min-height: 46px;
+  max-height: 150px;
+  resize: vertical;
+  padding: 0.65rem 0.75rem;
+}
+
+.guestbook-form input:focus,
+.guestbook-form textarea:focus {
+  outline: 3px solid #ec88a555;
+  border-color: var(--orange);
+}
+
+.guestbook-composer {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: 0.75rem;
+}
+
+.guestbook-form-status {
+  min-height: 1.25em;
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.76rem;
+  overflow-wrap: anywhere;
+}
+
+.guestbook-form-status.is-error {
+  color: #b14363;
+}
+
+.guestbook-privacy {
+  margin: 0;
+  padding: 0 1.5rem 1rem;
+  color: #9c8b99;
+  font-size: 0.7rem;
+}
+
+.guestbook-card [hidden] {
+  display: none !important;
+}
+
 .contact {
   position: relative;
   display: flex;
@@ -1452,6 +1689,47 @@ h3 {
     text-align: left;
   }
 
+  .guestbook {
+    padding-top: 4.5rem;
+    padding-bottom: 4.5rem;
+  }
+
+  .guestbook-card-header {
+    padding: 1rem;
+  }
+
+  .guestbook-list {
+    height: min(52vh, 400px);
+    padding: 1rem;
+  }
+
+  .guestbook-join {
+    display: block;
+    padding: 1rem;
+  }
+
+  .guestbook-join .button {
+    margin-top: 0.8rem;
+  }
+
+  .guestbook-form {
+    padding-right: 1rem;
+    padding-left: 1rem;
+  }
+
+  .guestbook-composer {
+    grid-template-columns: 1fr;
+  }
+
+  .guestbook-composer .button {
+    justify-self: end;
+  }
+
+  .guestbook-privacy {
+    padding-right: 1rem;
+    padding-left: 1rem;
+  }
+
   .contact {
     width: 100%;
     min-height: 350px;
@@ -1479,6 +1757,17 @@ h3 {
   }
 
   .site-footer p {
+    display: none;
+  }
+}
+
+@media (max-width: 380px) {
+  .site-nav {
+    gap: 0.4rem;
+    font-size: 0.65rem;
+  }
+
+  .site-nav > a:nth-child(2) {
     display: none;
   }
 }
@@ -1541,5 +1830,17 @@ h3 {
   50% {
     opacity: 1;
     scale: 1.12;
+  }
+}
+
+@keyframes guestbook-arrive {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
