@@ -1096,6 +1096,16 @@ h3 {
   white-space: nowrap;
 }
 
+.guestbook-visibility {
+  flex: 0 0 auto;
+  border: 1px solid #efdee7;
+  border-radius: 999px;
+  padding: 0.05rem 0.45rem;
+  color: #806174;
+  font-size: 0.62rem;
+  font-weight: 700;
+}
+
 .guestbook-time {
   flex: 0 0 auto;
   color: #9c8b99;
@@ -1162,6 +1172,33 @@ h3 {
   border-top: 1px solid var(--line);
 }
 
+.guestbook-author-line {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.25rem;
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
+.guestbook-author-line p {
+  margin: 0;
+}
+
+.guestbook-author-line strong {
+  color: var(--plum);
+}
+
+.guestbook-author-line a,
+.profile-back-link {
+  color: var(--plum);
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
 .guestbook-form label {
   color: #665466;
   font-size: 0.75rem;
@@ -1169,7 +1206,8 @@ h3 {
 }
 
 .guestbook-form input,
-.guestbook-form textarea {
+.guestbook-form textarea,
+.guestbook-form select {
   width: 100%;
   border: 1px solid var(--line);
   border-radius: 12px;
@@ -1184,6 +1222,11 @@ h3 {
   padding: 0.55rem 0.75rem;
 }
 
+.guestbook-form select {
+  min-height: 44px;
+  padding: 0.55rem 0.75rem;
+}
+
 .guestbook-form textarea {
   min-height: 46px;
   max-height: 150px;
@@ -1192,7 +1235,8 @@ h3 {
 }
 
 .guestbook-form input:focus,
-.guestbook-form textarea:focus {
+.guestbook-form textarea:focus,
+.guestbook-form select:focus {
   outline: 3px solid #ec88a555;
   border-color: var(--orange);
 }
@@ -1225,6 +1269,131 @@ h3 {
 
 .guestbook-card [hidden] {
   display: none !important;
+}
+
+.profile-page {
+  padding-top: 5rem;
+  padding-bottom: 5rem;
+}
+
+.profile-page[hidden] {
+  display: none !important;
+}
+
+.profile-card {
+  max-width: 650px;
+  margin: 0 auto;
+  border: 1px solid #f0dfe7;
+  border-radius: 24px;
+  padding: clamp(1.5rem, 5vw, 3rem);
+  background: #fffdfd;
+  box-shadow: 0 12px 30px #734c6718;
+}
+
+.profile-card h1 {
+  margin: 0;
+  font-family: var(--display);
+  font-size: clamp(2.2rem, 6vw, 3.25rem);
+  letter-spacing: -0.07em;
+  line-height: 1.15;
+}
+
+.profile-description {
+  margin: 0.75rem 0 1.5rem;
+  color: var(--muted);
+  font-size: 0.88rem;
+}
+
+.profile-email-line {
+  display: grid;
+  gap: 0.1rem;
+  margin: 0 0 1.5rem;
+  border-radius: 14px;
+  padding: 0.8rem 1rem;
+  background: #fff7fa;
+  font-size: 0.82rem;
+  overflow-wrap: anywhere;
+}
+
+.profile-email-line strong {
+  color: var(--plum);
+}
+
+.profile-email-line span {
+  color: var(--muted);
+  font-size: 0.72rem;
+}
+
+.profile-form {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.profile-form label {
+  margin-top: 0.35rem;
+  color: #665466;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.profile-form input,
+.profile-form textarea {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 0.65rem 0.8rem;
+  background: white;
+  color: var(--ink);
+  font: inherit;
+  font-size: 0.86rem;
+}
+
+.profile-form input {
+  min-height: 46px;
+}
+
+.profile-form textarea {
+  resize: vertical;
+}
+
+.profile-form input:focus,
+.profile-form textarea:focus {
+  outline: 3px solid #ec88a555;
+  border-color: var(--orange);
+}
+
+.profile-form .button {
+  justify-self: start;
+  margin-top: 0.5rem;
+  border: 0;
+  cursor: pointer;
+}
+
+.profile-form .button:disabled {
+  cursor: wait;
+  opacity: 0.65;
+}
+
+.profile-status {
+  min-height: 1.5em;
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
+.profile-status.is-error {
+  color: #b14363;
+}
+
+.profile-signout {
+  margin-top: 1rem;
+  border: 0;
+  cursor: pointer;
+}
+
+.profile-back-link {
+  display: inline-block;
+  margin-top: 1rem;
 }
 
 .contact {

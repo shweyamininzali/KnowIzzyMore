@@ -6,11 +6,14 @@ const boardStatus = document.querySelector("#board-status");
 const boardNotice = document.querySelector("#board-notice");
 const postList = document.querySelector("#post-list");
 const postForm = document.querySelector("#post-form");
-const postName = document.querySelector("#post-name");
+const postAuthor = document.querySelector("#post-author");
 const postMessage = document.querySelector("#post-message");
+const postVisibility = document.querySelector("#post-visibility");
 const postSubmit = document.querySelector("#post-submit");
 const postStatus = document.querySelector("#post-status");
 const messages = new Map();
+let feedGeneration = 0;
+let profileGeneration = 0;
 
 function getErrorMessage(error, fallback) {
   if (error instanceof Error) {
@@ -44,20 +47,44 @@ function setRealtimeStatus(status, connected) {
   boardStatus.classList.toggle("is-connected", connected);
 }
 
-function updateBoardAccess(user) {
+async function updateBoardAccess(user) {
+  const request = ++profileGeneration;
   const signedIn = Boolean(user);
   boardJoin.hidden = signedIn;
-  postForm.hidden = !signedIn;
 
   if (!signedIn) {
+    postForm.hidden = true;
     postForm.reset();
+    postAuthor.textContent = "";
     setPostStatus("");
     return;
   }
 
-  const displayName = user.user_metadata?.display_name;
-  if (typeof displayName === "string" && !postName.value) {
-    postName.value = displayName;
+  postForm.hidden = true;
+  try {
+    const { data, error } = await supabase
+      .from("profiles")
+      .select("display_name")
+      .eq("user_id", user.id)
+      .single();
+
+    if (error) {
+      throw error;
+    }
+    if (request !== profileGeneration) {
+      return;
+    }
+
+    postAuthor.textContent = data.display_name;
+    postForm.hidden = false;
+    setPostStatus("");
+  } catch (error) {
+    if (request === profileGeneration) {
+      setPostStatus(
+        getErrorMessage(error, "Could not load your profile. Update it before posting."),
+        true,
+      );
+    }
   }
 }
 
@@ -92,12 +119,19 @@ function renderPosts() {
     time.className = "guestbook-time";
     time.dateTime = post.created_at;
     time.textContent = formatTime(post.created_at);
+    metadata.append(author, time);
+
+    if (post.visibility === "private") {
+      const visibility = document.createElement("span");
+      visibility.className = "guestbook-visibility";
+      visibility.textContent = "Private";
+      metadata.append(visibility);
+    }
 
     const message = document.createElement("p");
     message.className = "guestbook-message";
     message.textContent = post.message;
 
-    metadata.append(author, time);
     article.append(metadata, message);
     postList.append(article);
   }
@@ -105,6 +139,16 @@ function renderPosts() {
   if (nearBottom) {
     postList.scrollTop = postList.scrollHeight;
   }
+}
+
+function showLoadingPosts() {
+  feedGeneration += 1;
+  messages.clear();
+  postList.setAttribute("aria-busy", "true");
+  const loadingState = document.createElement("p");
+  loadingState.className = "guestbook-empty";
+  loadingState.textContent = "Loading messages…";
+  postList.replaceChildren(loadingState);
 }
 
 function trimOldPosts() {
@@ -128,16 +172,21 @@ function addPost(post) {
 }
 
 async function loadPosts() {
-  postList.setAttribute("aria-busy", "true");
+  showLoadingPosts();
+  const generation = ++feedGeneration;
+
   try {
     const { data, error } = await supabase
       .from("posts")
-      .select("id, name, message, created_at")
+      .select("id, name, message, created_at, visibility")
       .order("created_at", { ascending: false })
       .limit(100);
 
     if (error) {
       throw error;
+    }
+    if (generation !== feedGeneration) {
+      return;
     }
 
     for (const post of data) {
@@ -147,13 +196,18 @@ async function loadPosts() {
     renderPosts();
     boardNotice.textContent = "";
   } catch (error) {
+    if (generation !== feedGeneration) {
+      return;
+    }
     const emptyState = document.createElement("p");
     emptyState.className = "guestbook-empty";
     emptyState.textContent = "Messages aren’t available right now.";
     postList.replaceChildren(emptyState);
     boardNotice.textContent = `Could not load messages: ${getErrorMessage(error, "Please try again later.")}`;
   } finally {
-    postList.setAttribute("aria-busy", "false");
+    if (generation === feedGeneration) {
+      postList.setAttribute("aria-busy", "false");
+    }
   }
 }
 
@@ -168,17 +222,23 @@ postForm.addEventListener("submit", async (event) => {
     return;
   }
 
+  if (!postMessage.value.trim()) {
+    setPostStatus("Write a message before sending it.", true);
+    postMessage.focus();
+    return;
+  }
+
   postSubmit.disabled = true;
   setPostStatus("Sending your message…");
   try {
     const { data, error } = await supabase
       .from("posts")
       .insert({
-        name: postName.value.trim(),
         message: postMessage.value.trim(),
+        visibility: postVisibility.value,
         user_id: currentUser.id,
       })
-      .select("id, name, message, created_at")
+      .select("id, name, message, created_at, visibility")
       .single();
 
     if (error) {
@@ -203,9 +263,18 @@ async function initializeBoard() {
       throw new Error("Supabase could not be initialized. Please try again later.");
     }
 
-    updateBoardAccess(currentUser);
+    void updateBoardAccess(currentUser);
     supabase.auth.onAuthStateChange((_event, session) => {
-      updateBoardAccess(session?.user ?? null);
+      showLoadingPosts();
+      if (!session?.user) {
+        void updateBoardAccess(null);
+      } else {
+        postForm.hidden = true;
+      }
+      setTimeout(() => {
+        void updateBoardAccess(session?.user ?? null);
+        void loadPosts();
+      }, 0);
     });
 
     supabase
@@ -214,6 +283,17 @@ async function initializeBoard() {
         "postgres_changes",
         { event: "INSERT", schema: "public", table: "posts" },
         ({ new: post }) => addPost(post),
+      )
+      .on(
+        "postgres_changes",
+        { event: "UPDATE", schema: "public", table: "posts" },
+        ({ new: post }) => {
+          if (post?.id) {
+            messages.set(post.id, post);
+            trimOldPosts();
+            renderPosts();
+          }
+        },
       )
       .subscribe((status, error) => {
         const connected = status === "SUBSCRIBED";
@@ -230,5 +310,10 @@ async function initializeBoard() {
     postList.setAttribute("aria-busy", "false");
   }
 }
+
+document.addEventListener("profile-updated", (event) => {
+  postAuthor.textContent = event.detail.displayName;
+  void loadPosts();
+});
 
 initializeBoard();

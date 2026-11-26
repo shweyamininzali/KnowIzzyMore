@@ -20,10 +20,17 @@ Before using signup on the live site:
 
 1. Enable the **Email** provider in Supabase Authentication settings.
 2. In **Authentication → URL Configuration**, set the Site URL to `https://shweyamininzali.github.io/KnowIzzyMore/` and add that same URL to the allowed redirect URLs. Add your local preview URL there too if you test signup locally.
-3. Keep Row Level Security enabled. The board is public to read, but only signed-in users can post.
-4. In the same Supabase project, run [`supabase/message-board-access.sql`](supabase/message-board-access.sql) in the SQL Editor. It creates `posts` if needed, preserves existing messages, replaces the policies on that table with public-read/authenticated-insert access, and grants signed-in users permission to insert messages under their own account.
+3. Keep Row Level Security enabled. Public posts are readable by anyone; private posts are readable only by their author and the site owner.
+4. In the same Supabase project, run [`supabase/message-board-access.sql`](supabase/message-board-access.sql) in the SQL Editor. It creates and backfills private profiles, preserves existing messages as public, replaces the board/profile policies, and enables signed-in users to post under their own account.
+5. Add the owner's existing Supabase Auth account to the private owner list by running this once in the SQL Editor, replacing the placeholder with the owner's sign-in email. Keep the actual email out of committed public files:
 
-The Supabase JavaScript client is loaded from `esm.sh`, so no build step or npm install is needed. Signup displays an email-confirmation prompt when Supabase requires confirmation. Message content and display names are public; do not post private information.
+   ```sql
+   insert into public.message_board_owner (user_id)
+   select id from auth.users where lower(email) = lower('<owner sign-in email>')
+   on conflict (user_id) do nothing;
+   ```
+
+The Supabase JavaScript client is loaded from `esm.sh`, so no build step or npm install is needed. Signup displays an email-confirmation prompt when Supabase requires confirmation. Supabase Auth stores passwords as secure hashes; this site never stores or reads password values after sign-in. Profile data is private to each user. Public post names and messages are visible to everyone; private messages are visible only to the author and owner. Email is shown read-only on the profile page and cannot be changed there.
 
 The original [messageboard_db](https://github.com/shweyamininzali/messageboard_db) Express server is not used by GitHub Pages. Do not deploy its current anonymous API publicly: it uses a server secret that bypasses RLS, and its endpoints do not require a signed-in user.
 

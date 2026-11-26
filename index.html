@@ -236,8 +236,15 @@
             <button class="button button-dark" id="board-signin" type="button">Sign in to post</button>
           </div>
           <form class="guestbook-form" id="post-form" hidden>
-            <label for="post-name">Your display name</label>
-            <input id="post-name" name="name" type="text" maxlength="80" autocomplete="nickname" required />
+            <div class="guestbook-author-line">
+              <p>Posting as <strong id="post-author"></strong></p>
+              <a href="#profile">Edit profile</a>
+            </div>
+            <label for="post-visibility">Who can see this message?</label>
+            <select id="post-visibility" name="visibility">
+              <option value="public">Public — everyone can read it</option>
+              <option value="private">Private — only you and Izzy can read it</option>
+            </select>
             <div class="guestbook-composer">
               <label class="visually-hidden" for="post-message">Your message</label>
               <textarea
@@ -252,7 +259,28 @@
             </div>
             <p class="guestbook-form-status" id="post-status" role="status" aria-live="polite"></p>
           </form>
-          <p class="guestbook-privacy">Messages are public. Please don’t share private information.</p>
+          <p class="guestbook-privacy">Public messages are visible to everyone. Private messages are visible only to you and Izzy.</p>
+        </div>
+      </section>
+
+      <section class="profile-page section-wrap" id="profile-page" aria-labelledby="profile-title" hidden>
+        <div class="profile-card">
+          <p class="eyebrow">Your little corner</p>
+          <h1 id="profile-title">Your profile</h1>
+          <p class="profile-description">Update the details shown with your account. Your country and interests are private.</p>
+          <p class="profile-email-line">Sign-in email <strong id="profile-email"></strong><span>Email changes aren’t available here.</span></p>
+          <form class="profile-form" id="profile-form">
+            <label for="profile-name">Name</label>
+            <input id="profile-name" name="display_name" type="text" maxlength="80" autocomplete="nickname" required />
+            <label for="profile-country">Country</label>
+            <input id="profile-country" name="country" type="text" maxlength="100" autocomplete="country-name" />
+            <label for="profile-interests">Interests</label>
+            <textarea id="profile-interests" name="interests" maxlength="500" rows="4" placeholder="A few things you enjoy..."></textarea>
+            <button class="button button-dark" id="profile-save" type="submit">Save profile</button>
+            <p class="profile-status" id="profile-status" role="status" aria-live="polite"></p>
+          </form>
+          <button class="button button-light profile-signout" id="profile-signout" type="button">Sign out</button>
+          <a class="profile-back-link" href="#home">Back to the introduction</a>
         </div>
       </section>
 
@@ -285,7 +313,7 @@
           <button class="auth-mode-button" id="auth-signup-mode" type="button" aria-pressed="false">Sign up</button>
         </div>
         <form class="auth-form" id="auth-form">
-          <label for="auth-display-name" id="auth-display-name-label" hidden>Display name</label>
+          <label for="auth-display-name" id="auth-display-name-label" hidden>Profile name</label>
           <input
             id="auth-display-name"
             name="display-name"
@@ -317,6 +345,7 @@
     </dialog>
     <script src="script.js"></script>
     <script type="module" src="auth.js"></script>
+    <script type="module" src="profile.js"></script>
     <script type="module" src="message-board.js"></script>
   </body>
 </html>

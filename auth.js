@@ -50,7 +50,7 @@ function getErrorMessage(error) {
 function updateView() {
   const signedIn = Boolean(currentUser);
   const signingUp = !signedIn && mode === "signup";
-  authOpen.textContent = signedIn ? "Account" : "Sign in";
+  authOpen.textContent = signedIn ? "My profile" : "Sign in";
   authForm.hidden = signedIn;
   authModeToggle.hidden = signedIn;
   authSession.hidden = !signedIn;
@@ -69,7 +69,7 @@ function updateView() {
   authTitle.textContent = mode === "signup" ? "Make yourself at home." : "Welcome back.";
   authDescription.textContent =
     mode === "signup"
-      ? "Choose a display name, email, and password of at least six characters."
+      ? "Choose a profile name, email, and password of at least six characters."
       : "Sign in with your email address and password.";
   authFootnote.textContent =
     mode === "signup"
@@ -89,6 +89,11 @@ function setMode(nextMode) {
 }
 
 authOpen.addEventListener("click", () => {
+  if (currentUser) {
+    window.location.hash = "profile";
+    return;
+  }
+
   authDialog.showModal();
   if (connectionError) {
     setStatus(`Could not connect to Supabase: ${getErrorMessage(connectionError)}`, "error");
@@ -205,6 +210,9 @@ async function initializeAuth() {
         mode = "login";
       }
       updateView();
+      document.dispatchEvent(
+        new CustomEvent("auth-state-changed", { detail: { user: currentUser } }),
+      );
     });
 
     const { data, error } = await supabase.auth.getSession();
@@ -214,6 +222,9 @@ async function initializeAuth() {
     currentUser = data.session?.user ?? null;
     connectionState = "ready";
     updateView();
+    document.dispatchEvent(
+      new CustomEvent("auth-state-changed", { detail: { user: currentUser } }),
+    );
     if (authDialog.open) {
       setStatus("");
     }
