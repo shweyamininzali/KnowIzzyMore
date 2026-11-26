@@ -1,4 +1,4 @@
-import { currentUser, supabase, supabaseReady } from "./auth.js?v=pages-avatars-1";
+import { currentUser, supabase, supabaseReady } from "./auth.js?v=profile-button-name-1";
 
 const profileSignin = document.querySelector("#profile-signin");
 const profileSigninButton = document.querySelector("#profile-signin-button");

@@ -27,6 +27,9 @@ let connectionState = "loading";
 let connectionError = null;
 export let currentUser = null;
 let mode = "login";
+let profileButtonName = "";
+let profileNameError = null;
+let profileNameRequest = 0;
 
 function setStatus(message, state) {
   authStatus.textContent = message;
@@ -47,10 +50,66 @@ function getErrorMessage(error) {
   return "Something went wrong. Please try again.";
 }
 
+function getFallbackProfileName(user) {
+  const metadataName = user?.user_metadata?.display_name;
+  if (typeof metadataName === "string" && metadataName.trim()) {
+    return metadataName.trim();
+  }
+  if (typeof user?.email === "string" && user.email.includes("@")) {
+    return user.email.split("@")[0];
+  }
+  return "My profile";
+}
+
+async function loadProfileButtonName(user) {
+  const request = ++profileNameRequest;
+  profileButtonName = getFallbackProfileName(user);
+  profileNameError = null;
+  updateView();
+
+  if (!user || !supabase) {
+    return;
+  }
+
+  try {
+    const { data, error } = await supabase
+      .from("profiles")
+      .select("display_name")
+      .eq("user_id", user.id)
+      .single();
+    if (error) {
+      throw error;
+    }
+    if (request !== profileNameRequest) {
+      return;
+    }
+    if (typeof data?.display_name !== "string" || !data.display_name.trim()) {
+      throw new Error("Your profile does not have a name yet.");
+    }
+
+    profileButtonName = data.display_name.trim();
+    updateView();
+  } catch (error) {
+    if (request !== profileNameRequest) {
+      return;
+    }
+    profileNameError = `Could not load your profile name: ${getErrorMessage(error)}`;
+    if (authDialog.open) {
+      setStatus(profileNameError, "error");
+    }
+  }
+}
+
 function updateView() {
   const signedIn = Boolean(currentUser);
   const signingUp = !signedIn && mode === "signup";
-  authOpen.textContent = signedIn ? "My profile" : "Sign in";
+  const buttonLabel = signedIn ? profileButtonName || getFallbackProfileName(currentUser) : "Sign in";
+  authOpen.textContent = buttonLabel;
+  authOpen.title = signedIn ? buttonLabel : "";
+  authOpen.setAttribute(
+    "aria-label",
+    signedIn && buttonLabel !== "My profile" ? `Open profile for ${buttonLabel}` : buttonLabel,
+  );
   authForm.hidden = signedIn;
   authModeToggle.hidden = signedIn;
   authSession.hidden = !signedIn;
@@ -102,6 +161,8 @@ authOpen.addEventListener("click", () => {
   authDialog.showModal();
   if (connectionError) {
     setStatus(`Could not connect to Supabase: ${getErrorMessage(connectionError)}`, "error");
+  } else if (profileNameError) {
+    setStatus(profileNameError, "error");
   } else if (connectionState === "loading") {
     setStatus("Connecting to your account…");
   } else {
@@ -214,10 +275,14 @@ async function initializeAuth() {
       if (hadUser && !currentUser) {
         mode = "login";
       }
+      profileButtonName = currentUser ? getFallbackProfileName(currentUser) : "";
+      profileNameError = null;
       updateView();
       document.dispatchEvent(
         new CustomEvent("auth-state-changed", { detail: { user: currentUser } }),
       );
+      const user = currentUser;
+      setTimeout(() => void loadProfileButtonName(user), 0);
     });
 
     const { data, error } = await supabase.auth.getSession();
@@ -226,10 +291,12 @@ async function initializeAuth() {
     }
     currentUser = data.session?.user ?? null;
     connectionState = "ready";
+    profileButtonName = currentUser ? getFallbackProfileName(currentUser) : "";
     updateView();
     document.dispatchEvent(
       new CustomEvent("auth-state-changed", { detail: { user: currentUser } }),
     );
+    void loadProfileButtonName(currentUser);
     if (authDialog.open) {
       setStatus("");
     }
@@ -241,6 +308,17 @@ async function initializeAuth() {
     }
   }
 }
+
+document.addEventListener("profile-updated", (event) => {
+  const displayName = event.detail?.displayName;
+  if (typeof displayName !== "string" || !displayName.trim()) {
+    return;
+  }
+  profileNameRequest += 1;
+  profileButtonName = displayName.trim();
+  profileNameError = null;
+  updateView();
+});
 
 updateView();
 export const supabaseReady = initializeAuth();
