@@ -1,4 +1,4 @@
-import { currentUser, supabase, supabaseReady } from "./auth.js";
+import { currentUser, supabase, supabaseReady } from "./auth.js?v=950eba3";
 
 const signInButton = document.querySelector("#board-signin");
 const boardJoin = document.querySelector("#board-join");

@@ -1,4 +1,4 @@
-import { currentUser, supabase, supabaseReady } from "./auth.js";
+import { currentUser, supabase, supabaseReady } from "./auth.js?v=950eba3";
 
 const profilePage = document.querySelector("#profile-page");
 const profileForm = document.querySelector("#profile-form");
